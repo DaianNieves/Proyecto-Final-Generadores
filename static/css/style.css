@@ -1,0 +1,76 @@
+/* ==========================================
+   ESTILOS GENERALES
+   ========================================== */
+body { 
+    background-color: #e9ecef; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
+
+/* ==========================================
+   COMPONENTES UI (TARJETAS)
+   ========================================== */
+.card { 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    border: none; 
+    border-radius: 12px; 
+    transition: transform 0.2s; 
+}
+
+/* Títulos grandes de métricas (números) */
+.metric-value { 
+    font-size: 2.5rem; 
+    font-weight: 800; 
+}
+
+/* Badges de estado en la parte inferior de las cards */
+.status-badge { 
+    font-size: 1rem; 
+    padding: 8px; 
+    width: 100%; 
+    display: block; 
+}
+
+/* ==========================================
+   MAPA
+   ========================================== */
+#map { 
+    height: 350px; 
+    width: 100%; 
+    border-radius: 8px; 
+}
+
+/* ==========================================
+   ANIMACIONES Y ALERTAS
+   ========================================== */
+/* Borde rojo fijo para tarjetas en peligro */
+.danger-card { 
+    border: 2px solid #dc3545; 
+}
+
+/* Animación de parpadeo suave para fondo */
+.blink-bg { 
+    animation: blinker 1.0s linear infinite; 
+}
+
+@keyframes blinker {
+    50% { 
+        background-color: rgba(220, 53, 69, 0.2); 
+        border-color: red; 
+    }
+}
+
+/* ==========================================
+   TABLA DE HISTORIAL
+   ========================================== */
+.table-container { 
+    max-height: 400px; 
+    overflow-y: auto; 
+}
+
+/* Cabecera pegajosa (sticky) para que no desaparezca al hacer scroll */
+.table thead th { 
+    position: sticky; 
+    top: 0; 
+    background-color: white; 
+    z-index: 1; 
+}
