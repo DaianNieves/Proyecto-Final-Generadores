@@ -1,14 +1,10 @@
-/* ==========================================
-   ESTILOS GENERALES
-   ========================================== */
+/* ESTILOS GENERALES */
 body { 
     background-color: #e9ecef; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
-/* ==========================================
-   COMPONENTES UI (TARJETAS)
-   ========================================== */
+/* COMPONENTES UI (TARJETAS) */
 .card { 
     box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
     border: none; 
@@ -30,18 +26,14 @@ body {
     display: block; 
 }
 
-/* ==========================================
-   MAPA
-   ========================================== */
+/* MAPA */
 #map { 
     height: 350px; 
     width: 100%; 
     border-radius: 8px; 
 }
 
-/* ==========================================
-   ANIMACIONES Y ALERTAS
-   ========================================== */
+/* ANIMACIONES Y ALERTAS */
 /* Borde rojo fijo para tarjetas en peligro */
 .danger-card { 
     border: 2px solid #dc3545; 
@@ -59,9 +51,7 @@ body {
     }
 }
 
-/* ==========================================
-   TABLA DE HISTORIAL
-   ========================================== */
+/*Tabla de Historial*/
 .table-container { 
     max-height: 400px; 
     overflow-y: auto; 

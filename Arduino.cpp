@@ -3,9 +3,6 @@
 #include <Wire.h>               
 #include "Adafruit_CCS811.h"    
 
-// ==========================================
-// 1. CONFIGURACIÓN
-// ==========================================
 // GPS conectado a pines 4 (RX) y 3 (TX)
 static const int RXPin = 4;
 static const int TXPin = 3;
@@ -19,9 +16,6 @@ const int PIN_MQ7 = A0;
 const int MPU_ADDR = 0x68; 
 unsigned long lastUpdate = 0; 
 
-// ==========================================
-// 2. ESTRUCTURA DE ALTA RESOLUCIÓN (16 BITS)
-// ==========================================
 struct DatosSensores {
   uint16_t nivelGas;      
   uint16_t nivelCO2;      
@@ -49,7 +43,6 @@ const DatosSensores llave = {
 
 void setup() {
   // Serial Hardware (Pines 0 y 1) se usará para enviar a la Raspberry
-  // Y también para ver en el monitor serial (USB)
   Serial.begin(9600);
   
   ss.begin(GPSBaud); 
@@ -80,7 +73,7 @@ void loop() {
 void procesarDatosFullResolution() {
   DatosSensores datosOriginales;
 
-  // --- A. LECTURA SENSORS ---
+  // --- LECTURA SENSORES ---
   datosOriginales.nivelGas = analogRead(PIN_MQ7);
 
   if(ccs.available() && !ccs.readData()){
@@ -131,7 +124,7 @@ void procesarDatosFullResolution() {
   datosCifrados.gpsLon_High   = datosOriginales.gpsLon_High ^ llave.gpsLon_High;
   datosCifrados.gpsLon_Low    = datosOriginales.gpsLon_Low  ^ llave.gpsLon_Low;
 
-  // --- C. ENVÍO DE DATOS ---
+  // --- ENVÍO DE DATOS ---
   
   // 1. Mostrar en Monitor Serial (para humanos)
   Serial.println(F("\n--- MONITOR (Depuración) ---"));
@@ -142,10 +135,6 @@ void procesarDatosFullResolution() {
   enviarTramaRaspberry(datosCifrados);
 }
 
-// --------------------------------------------------------
-// FUNCIÓN CLAVE: Genera el string para la Raspberry
-// Formato: >Val1,Val2,Val3,Val4,Val5,Val6,Val7,Val8,Val9<
-// --------------------------------------------------------
 void enviarTramaRaspberry(const DatosSensores& d) {
   Serial.print(">"); // Carácter de INICIO
   
@@ -159,7 +148,7 @@ void enviarTramaRaspberry(const DatosSensores& d) {
   Serial.print(d.gpsLon_High); Serial.print(",");
   Serial.print(d.gpsLon_Low);
   
-  Serial.println("<"); // Carácter de FIN
+  Serial.println("<");
 }
 
 // Función auxiliar para ver datos claros en el monitor

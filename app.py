@@ -86,17 +86,13 @@ def index():
 @app.route('/api/history')
 def get_history():
     try:
-        # Obtener límite de la URL ?limit=20 (Default 20)
-        limit = request.args.get('limit', 20)
-        
-        # Petición a Firebase ordenando por clave (tiempo) y limitando al final
+        limit = request.args.get('limit', 20)        
         url = f'{FIREBASE_URL}?orderBy="$key"&limitToLast={limit}'
         response = requests.get(url)
         
         if response.status_code == 200:
             data = response.json()
             if data:
-                # Convertir diccionario a lista para facilitar el manejo en JS
                 lista = []
                 for k, v in data.items():
                     v['firebase_id'] = k

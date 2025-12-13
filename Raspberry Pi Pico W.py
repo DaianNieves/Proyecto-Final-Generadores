@@ -1,25 +1,19 @@
 from machine import UART, Pin
 import time
-import network   # Para Wi-Fi
-import urequests # Para enviar datos HTTP
-import ujson     # Para formatear JSON
+import network   
+import urequests 
+import ujson     
 
-# ==========================================
-# 0. CREDENCIALES Y CONFIGURACIÓN DE RED
-# ==========================================
+# CREDENCIALES Y CONFIGURACIÓN DE RED
 WIFI_SSID = "Computo"
 WIFI_PASS = "Centro20#25Computo?"
 FIREBASE_URL = "https://recolectores-de-datos-p6-default-rtdb.firebaseio.com/sensores.json"
 
-# ==========================================
-# 1. CONFIGURACIÓN UART (SERIAL)
-# ==========================================
+# CONFIGURACIÓN UART (SERIAL)
 # UART 0, Baudrate 9600 (Igual que Arduino), TX=GP0, RX=GP1
 uart = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))
 
-# ==========================================
 # 2. LLAVE DE CIFRADO
-# ==========================================
 KEY_GAS      = 0b1010101010101010
 KEY_CO2      = 0b1100110011001100
 KEY_MOV_X    = 0b1111000011110000
@@ -54,7 +48,6 @@ def conectar_wifi():
         print('¡Conectado! IP:', wlan.ifconfig()[0])
         return True
 
-# Conectamos antes de entrar al loop principal
 if not conectar_wifi():
     print("ADVERTENCIA: Trabajando sin conexión a internet.")
 
@@ -62,9 +55,6 @@ def enviar_a_firebase(datos_dict):
     try:
         # Convertimos el diccionario a JSON string
         json_data = ujson.dumps(datos_dict)
-        
-        # Enviamos petición POST para agregar un nuevo registro
-        # Si usas PUT, sobrescribirás siempre el mismo dato
         response = urequests.post(FIREBASE_URL, data=json_data)
         
         if response.status_code == 200:
@@ -83,7 +73,7 @@ def procesar_trama(trama):
             print("Error: Trama incompleta")
             return
 
-        # 1. Convertir texto a enteros (CIFRADOS)
+        # Convertir texto a enteros (CIFRADOS)
         cif_gas      = int(partes[0])
         cif_co2      = int(partes[1])
         cif_mov_x    = int(partes[2])
@@ -94,7 +84,7 @@ def procesar_trama(trama):
         cif_lon_h    = int(partes[7])
         cif_lon_l    = int(partes[8])
 
-        # 2. DESCIFRAR
+        # DESCIFRAR
         val_gas   = cif_gas   ^ KEY_GAS
         val_co2   = cif_co2   ^ KEY_CO2
         val_mov_x = cif_mov_x ^ KEY_MOV_X
@@ -105,7 +95,7 @@ def procesar_trama(trama):
         val_lon_h = cif_lon_h ^ KEY_LON_HIGH
         val_lon_l = cif_lon_l ^ KEY_LON_LOW
 
-        # 3. RECONSTRUCCIÓN
+        # RECONSTRUCCIÓN
         def signed_16(val):
             if val > 32767: return val - 65536
             return val
@@ -123,10 +113,10 @@ def procesar_trama(trama):
         gps_lat = lat_entera / 1000000.0
         gps_lon = lon_entera / 1000000.0
 
-        # 4. IMPRIMIR REPORTE LOCAL
+        # IMPRIMIR REPORTE LOCAL
         print(f"Gas: {val_gas} | CO2: {val_co2} | GPS: {gps_lat}, {gps_lon}")
 
-        # 5. PREPARAR Y ENVIAR JSON A FIREBASE
+        # PREPARAR Y ENVIAR JSON A FIREBASE
         objeto_json = {
             "gas": val_gas,
             "co2": val_co2,
